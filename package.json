@@ -1,0 +1,41 @@
+{
+  "name": "prisma-null-foreignkey",
+  "version": "1.0.0",
+  "description": "A example to show create a record with a null foreign key.",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "npm run prisma:migrate && npm run prisma:generate && npm run prisma:seed",
+    "start": "ts-node ./src/index.ts",
+    "clean": "rimraf ./prisma/migrations $(grep DATABASE_URL .env | cut -d '=' -f2)",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate",
+    "prisma:seed": "prisma db seed --preview-feature"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuqingkuang/prisma-null-foreignkey.git"
+  },
+  "keywords": [
+    "prisma",
+    "foreignkey",
+    "database"
+  ],
+  "author": "xqkuang <x@kxq.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuqingkuang/prisma-null-foreignkey/issues"
+  },
+  "homepage": "https://github.com/xuqingkuang/prisma-null-foreignkey#readme",
+  "dependencies": {
+    "@prisma/client": "^2.20.1",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37",
+    "ava": "^3.15.0",
+    "dotenv": "^8.2.0",
+    "prisma": "^2.20.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  }
+}
