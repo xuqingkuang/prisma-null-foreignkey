@@ -8,7 +8,7 @@ The project shows a bug of [upsert](https://www.prisma.io/docs/reference/api-ref
 2. Install the dependencies: `npm i`
 3. Start the program: `npm start`
 
-The result will be output to stdout, and the reproducible code is locate at [./src/index.ts#L40](./src/index.ts#L40).
+The result will be output to stdout, and the reproducible code is locate at [./src/index.ts#L40](./src/index.ts#L44).
 
 ## Output
 
