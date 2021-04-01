@@ -18,7 +18,8 @@ The result will be output to stdout, and the reproducible code is locate at [./s
 > prisma-null-foreignkey@1.0.0 start
 > ts-node ./src/index.ts
 
-One books should exist  [
+========== One books should exist  ==========
+[
   {
     id: 1,
     title: 'The Old Man and the Sea',
@@ -26,7 +27,8 @@ One books should exist  [
     author: null
   }
 ]
-Two books should exist  [
+========== Two books should exist  ==========
+[
   {
     id: 1,
     title: 'The Old Man and the Sea',
@@ -35,7 +37,30 @@ Two books should exist  [
   },
   { id: 2, title: 'A Farewell to Arms', authorId: null, author: null }
 ]
-(node:3062375) UnhandledPromiseRejectionWarning: Error: 
+========== Prisma.upsert with null error: ==========
+PrismaClientValidationError
+
+Invalid `prisma.book.upsert()` invocation:
+
+{
+  where: {
+    title_authorId: {
+      title: 'For Whom the Bell Tolls',
+      authorId: null
+                ~~~~
+    }
+  },
+  update: {},
+  create: {
+    title: 'For Whom the Bell Tolls',
+    authorId: null
+  }
+}
+
+Argument authorId: Got invalid value null on prisma.upsertOneBook. Provided null, expected Int.
+
+
+Error: 
 Invalid `prisma.book.upsert()` invocation:
 
 {
@@ -63,7 +88,18 @@ Argument authorId: Got invalid value null on prisma.upsertOneBook. Provided null
     at NewPrismaClient._request (/home/xqkuang/github/prisma-null-foreignkey/node_modules/@prisma/client/runtime/index.js:34416:25)
     at Object.then (/home/xqkuang/github/prisma-null-foreignkey/node_modules/@prisma/client/runtime/index.js:34536:39)
     at processTicksAndRejections (internal/process/task_queues.js:93:5)
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:3062375) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
-(node:3062375) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+========== Prisma.upsert with non-exists foreign got foreign key constraint error ==========
+PrismaClientKnownRequestError2
+
+Invalid `prisma.book.upsert()` invocation:
+
+
+  Foreign key constraint failed on the field: `foreign key`
+Error: 
+Invalid `prisma.book.upsert()` invocation:
+
+
+  Foreign key constraint failed on the field: `foreign key`
+    at cb (/home/xqkuang/github/prisma-null-foreignkey/node_modules/@prisma/client/runtime/index.js:34862:17)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
 ```

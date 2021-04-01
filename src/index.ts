@@ -4,6 +4,11 @@ const prismaClient = new PrismaClient({
   log: ['warn', 'error'],
 });
 
+function log(message, ...args) {
+  console.log('='.repeat(10), message, '='.repeat(10));
+  args.forEach(arg => console.log(arg));
+};
+
 (async () => {
   // Clean the book table
   await prismaClient.$executeRaw('DELETE FROM Book');
@@ -17,9 +22,8 @@ const prismaClient = new PrismaClient({
         author: true,
       },
     });
-    console.log('One books should exist ', books);
+    log('One books should exist ', books);
   }
-
 
   // Insert a book with create method will be OK
   {
@@ -34,32 +38,53 @@ const prismaClient = new PrismaClient({
         author: true,
       },
     });
-    console.log('Two books should exist ', books);
+    log('Two books should exist ', books);
   }
 
-  // ISSUE: Insert a book with upsert method will throw a error.
+  // ISSUE 1: Insert a book with upsert method will throw a error.
   //        Error message: Argument authorId: Got invalid value null on prisma.upsertOneBook. Provided null, expected Int.
   {
     const title = 'For Whom the Bell Tolls';
-    await prismaClient.book.upsert({
-      where: {
-        title_authorId: {
+    try {
+      await prismaClient.book.upsert({
+        where: {
+          title_authorId: {
+            title,
+            authorId: null,
+          },
+        },
+        update: {},
+        create: {
           title,
           authorId: null,
         },
-      },
-      update: {},
-      create: {
-        title,
-        authorId: null,
-      },
-    });
-    const books = await prismaClient.book.findMany({
-      include: {
-        author: true,
-      },
-    });
-    console.log('Three books should exist', books);
+      });
+
+    } catch(err) {
+      log('Prisma.upsert with null error:', err.constructor.name, err.message, err.stack);
+    }
+  }
+
+  // ISSUE 2: Specfic the foreign key will throw anther foreign key constraint error.
+  {
+    try {
+      const title = 'For Whom the Bell Tolls';
+      await prismaClient.book.upsert({
+        where: {
+          title_authorId: {
+            title,
+            authorId: 0,
+          },
+        },
+        update: {},
+        create: {
+          title,
+          authorId: 0,
+        },
+      });
+    } catch(err) {
+      log('Prisma.upsert with non-exists foreign got foreign key constraint error', err.constructor.name, err.message, err.stack);
+    }
   }
 
   process.exit();
